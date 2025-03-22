@@ -11,6 +11,7 @@
 /********************/
 #define LAYER_NUM               5
 #define ADVANCED_KEY_NUM        88
+#define ANALOG_BUFFER_LENGTH    128
 #define KEY_NUM                 0
 //#define ENABLE_FIXED_POINT_EXPERIMENTAL
 //#define CONTINOUS_POLL

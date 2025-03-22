@@ -346,24 +346,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM7)
   {
-    static uint32_t test_cnt = 0;
-    test_cnt++;
     keyboard_scan();
-    for (uint8_t i = 0; i < ADVANCED_KEY_NUM; i++)
+    for (uint8_t i = 0; i < ANALOG_BUFFER_LENGTH; i++)
     {
         g_ADC_Averages[i] = ringbuf_avg(&adc_ringbuf[i]);
 #ifdef ENABLE_FILTER
         g_ADC_Averages[i] = adaptive_schimidt_filter(g_analog_filters+i,g_ADC_Averages[i]);
 #endif
-        if(i == 18)
-        {
-          g_ADC_Averages[18] = cos(test_cnt*0.01)*2048;
-        }
+      if ((uint16_t)~g_analog_map[i])
+      {
         AdvancedKey* key = &g_keyboard_advanced_keys[g_analog_map[i]];
         if (key->config.mode != KEY_DIGITAL_MODE)
         {
             advanced_key_update_raw(key, g_ADC_Averages[i]);
         }
+      }
     }
     switch (g_keyboard_state)
     {
@@ -397,19 +394,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       adc[7] += ADC_Buffer[DMA_BUF_LEN * 3 + i * 2 + 1] & 0xfff;
     }
 
-    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[0] / (float)(DMA_BUF_LEN/2));
-    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[1] / (float)(DMA_BUF_LEN/2));
-    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[2] / (float)(DMA_BUF_LEN/2));
-    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[3] / (float)(DMA_BUF_LEN/2));
-    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[4] / (float)(DMA_BUF_LEN/2));
-    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[5] / (float)(DMA_BUF_LEN/2));
-    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[6] / (float)(DMA_BUF_LEN/2));
-    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[7] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[0 + ADDRESS * 8], (float)adc[0] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[1 + ADDRESS * 8], (float)adc[1] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[2 + ADDRESS * 8], (float)adc[2] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[3 + ADDRESS * 8], (float)adc[3] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[4 + ADDRESS * 8], (float)adc[4] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[5 + ADDRESS * 8], (float)adc[5] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[6 + ADDRESS * 8], (float)adc[6] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[7 + ADDRESS * 8], (float)adc[7] / (float)(DMA_BUF_LEN/2));
 
     if (htim->Instance->CNT < 700)
     {
       g_analog_active_channel++;
-      if (g_analog_active_channel >= 11)
+      if (g_analog_active_channel >= ANALOG_CHANNEL_MAX)
       {
         g_analog_active_channel = 0;
       }

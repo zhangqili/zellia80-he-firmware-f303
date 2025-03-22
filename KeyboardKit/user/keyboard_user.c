@@ -115,16 +115,23 @@ AdvancedKey g_keyboard_advanced_keys[ADVANCED_KEY_NUM] =
     {.key.id = 87},
 };
 
-const uint16_t g_analog_map[ADVANCED_KEY_NUM] =
-{ 
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
-    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
-    33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 
-    44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 
-    55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 
-    66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 
-    77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
+const uint16_t g_analog_map[ANALOG_BUFFER_LENGTH] = {
+    0,              2,              4,              6,              8,              10,             12,             ANALOG_NO_MAP,
+    17,             19,             21,             23,             25,             27,             29,             ANALOG_NO_MAP,
+    34,             36,             38,             40,             42,             44,             46,             15,
+    ANALOG_NO_MAP,  ANALOG_NO_MAP, ANALOG_NO_MAP,   ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  32,
+    ANALOG_NO_MAP,  ANALOG_NO_MAP, ANALOG_NO_MAP,   ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  49,
+    51,             53,             55,             57,             59,             61,             ANALOG_NO_MAP,  14,
+    64,             79,             68,             80,             72,             74,             75,             31,
+    77,             66,             ANALOG_NO_MAP,  70,             ANALOG_NO_MAP,  81,             84,             48,
+    52,             54,             56,             58,             60,             62,             63,             ANALOG_NO_MAP,
+    78,             67,             69,             71,             73,             82,             ANALOG_NO_MAP,  76,
+    65,             ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  85,
+    ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  86,
+    ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  87,
+    1,              3,              5,              7,              9,              11,             13,             50,
+    18,             20,             22,             24,             26,             28,             30,             16,
+    35,             37,             39,             41,             43,             45,             47,             33
 };
 
 static const float table[]=
@@ -1200,7 +1207,7 @@ void keyboard_reboot()
 
 void analog_channel_select(uint8_t x)
 {
-    //x=BCD_TO_GRAY(x);
+    x=BCD_TO_GRAY(x);
     HAL_GPIO_WritePin(A_GPIO_Port, A_Pin, x&0x01);
     HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, x&0x02);
     HAL_GPIO_WritePin(C_GPIO_Port, C_Pin, x&0x04);
