@@ -10,7 +10,6 @@
 #include "usbd_user.h"
 #include "analog.h"
 #include "tim.h"
-#include "snake.h"
 #include "qmk_midi.h"
 
 const Keycode g_default_keymap[LAYER_NUM][ADVANCED_KEY_NUM + KEY_NUM] = {
@@ -20,22 +19,7 @@ const Keycode g_default_keymap[LAYER_NUM][ADVANCED_KEY_NUM + KEY_NUM] = {
         KEY_CAPS_LOCK/*28*/,    KEY_A/*29*/,    KEY_S/*30*/,    KEY_D/*31*/,    KEY_F/*32*/,    KEY_G/*33*/,    KEY_H/*34*/,    KEY_J/*35*/,    KEY_K/*36*/,    KEY_L/*37*/,    KEY_SEMICOLON/*38*/,KEY_APOSTROPHE/*39*/,   KEY_ENTER/*40*/,
         KEY_LEFT_SHIFT<<8/*41*/,KEY_Z/*42*/,    KEY_X/*43*/,    KEY_C/*44*/,    KEY_V/*45*/,    KEY_B/*46*/,    KEY_N/*47*/,    KEY_M/*48*/,    KEY_COMMA/*49*/,KEY_DOT/*50*/,  KEY_SLASH/*51*/,    KEY_RIGHT_SHIFT<<8/*52*/,KEY_UP_ARROW/*53*/,    KEY_DELETE/*54*/,
         KEY_LEFT_CTRL<<8/*55*/, KEY_LEFT_GUI<<8/*56*/, KEY_LEFT_ALT<<8/*57*/, KEY_SPACEBAR/*58*/, KEY_RIGHT_ALT<<8/*59*/, LAYER(LAYER_MOMENTARY, 1)/*60*/, KEY_LEFT_ARROW/*61*/, KEY_DOWN_ARROW/*62*/, KEY_RIGHT_ARROW/*63*/,
-    },
-    {
-        KEY_GRAVE,              KEY_F1,         KEY_F2,         KEY_F3,         KEY_F4,         KEY_F5,         KEY_F6,         KEY_F7,         KEY_F8,         KEY_F9,         KEY_F10,            KEY_F11,            KEY_F12,                KEY_TRANSPARENT,
-        KEY_TRANSPARENT,        KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,    KEY_PRINT_SCREEN,   KEY_SCROLL_LOCK,        KEY_PAUSE,
-        KEY_TRANSPARENT,        KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,    KEY_TRANSPARENT,    KEY_TRANSPARENT,
-        KEY_TRANSPARENT,        KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,    KEY_INSERT,         KEY_PAGE_UP,            LAYER(LAYER_MOMENTARY, 2),
-        KEY_TRANSPARENT,        KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_HOME,       KEY_PAGE_DOWN,  KEY_END,
-    },
-    {
-        KEYBOARD_OPERATION | (KEYBOARD_BOOTLOADER << 8),  KEYBOARD_OPERATION | (KEYBOARD_CONFIG0 << 8), KEYBOARD_OPERATION | (KEYBOARD_CONFIG1 << 8), KEYBOARD_OPERATION | (KEYBOARD_CONFIG2 << 8), KEYBOARD_OPERATION | (KEYBOARD_CONFIG3 << 8),         KEY_TRANSPARENT,             KEY_TRANSPARENT,               KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,    KEY_TRANSPARENT,        KEY_TRANSPARENT,        KEYBOARD_OPERATION | (KEYBOARD_RESET_TO_DEFAULT << 8),
-        KEY_TRANSPARENT,                        KEY_TRANSPARENT,                    KEY_TRANSPARENT,                    KEY_TRANSPARENT,                    KEYBOARD_OPERATION | (KEYBOARD_REBOOT << 8),           KEY_TRANSPARENT,             KEY_TRANSPARENT,               KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,    KEY_TRANSPARENT,        KEY_TRANSPARENT,        KEY_TRANSPARENT,
-        KEY_USER | (USER_SNAKE_LAUNCH << 8),    KEY_TRANSPARENT,                    KEYBOARD_OPERATION | (KEYBOARD_SAVE << 8),    KEYBOARD_OPERATION | (KEYBOARD_TOGGLE_DEBUG << 8),   KEYBOARD_OPERATION | (KEYBOARD_FACTORY_RESET << 8),   KEY_TRANSPARENT,             KEY_TRANSPARENT,               KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,    KEY_TRANSPARENT,        KEY_TRANSPARENT,
-        KEY_TRANSPARENT,                        KEY_TRANSPARENT,                    KEY_TRANSPARENT,                    KEY_TRANSPARENT,                    KEY_USER | (USER_EM << 8),                  KEY_USER | (USER_BEEP << 8), KEY_USER | (USER_RESET << 8),  KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,KEY_TRANSPARENT,    KEY_TRANSPARENT,        KEY_TRANSPARENT,        KEY_TRANSPARENT,
-        KEY_TRANSPARENT,                        KEY_TRANSPARENT,                    KEY_TRANSPARENT,                    KEY_TRANSPARENT,                    KEY_TRANSPARENT,                            KEY_TRANSPARENT,             KEY_TRANSPARENT,               KEY_TRANSPARENT,  KEY_TRANSPARENT,
     }
-
 };
 
 const uint8_t g_rgb_mapping[ADVANCED_KEY_NUM] = {50,51,52,53,54,55,56,57,58,59,60,61,62,63,
@@ -1216,43 +1200,9 @@ void keyboard_jump_to_bootloader(void)
 
 void keyboard_user_handler(uint8_t code)
 {
-    extern bool beep_switch;
-    extern bool em_switch;
     switch (code)
     {
-    case USER_BEEP:
-        beep_switch = !beep_switch;
-        break;
-    case USER_EM:
-        em_switch = !em_switch;
-        break;
-    case USER_SNAKE_LAUNCH:
-        snake_launch(&g_snake);
-        break;
-    case USER_SNAKE_QUIT:
-        snake_quit(&g_snake);
-        break;
-    case USER_SNAKE_PAUSE:
-        snake_pause(&g_snake);
-        break;
-    case USER_SNAKE_SPEED_UP:
-        snake_speed_up(&g_snake);
-        break;
-    case USER_SNAKE_SPEED_DOWN:
-        snake_speed_down(&g_snake);
-        break;
-    case USER_SNAKE_RESTART:
-        snake_restart(&g_snake);
-        break;
-    case USER_SNAKE_LEFT:
-    case USER_SNAKE_UP:
-    case USER_SNAKE_RIGHT:
-    case USER_SNAKE_DOWN:
-        snake_turn(&g_snake, code&0x07);
-        break;
     default:
-        beep_switch = false;
-        em_switch = false;
         g_keyboard_state = KEYBOARD_IDLE;
         break;
     }

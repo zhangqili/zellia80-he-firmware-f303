@@ -27,6 +27,20 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "stdbool.h"
+#include "stdlib.h"
+#include "analog.h"
+#include "rgb.h"
+#include "keyboard.h"
+#include "keyboard_conf.h"
+#include "math.h"
+#include "lfs.h"
+#include "command.h"
+#include "keyboard_def.h"
+#include "usbd_user.h"
+#include "command.h"
+#include "packet.h"
+#include "qmk_midi.h"
 
 /* USER CODE END Includes */
 
@@ -235,7 +249,29 @@ int main(void)
   MX_TIM7_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  DWT_Init();
+  usb_init();
+  keyboard_init();
+  setup_midi();
 
+  HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+  HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+  HAL_ADCEx_Calibration_Start(&hadc3, ADC_SINGLE_ENDED);
+  HAL_ADCEx_Calibration_Start(&hadc4, ADC_SINGLE_ENDED);
+
+  HAL_ADC_Start_DMA(&hadc1, ADC_Buffer + DMA_BUF_LEN*0, DMA_BUF_LEN);
+  HAL_ADC_Start_DMA(&hadc2, ADC_Buffer + DMA_BUF_LEN*1, DMA_BUF_LEN);
+  HAL_ADC_Start_DMA(&hadc3, ADC_Buffer + DMA_BUF_LEN*2, DMA_BUF_LEN);
+  HAL_ADC_Start_DMA(&hadc4, ADC_Buffer + DMA_BUF_LEN*3, DMA_BUF_LEN);
+  
+  HAL_TIM_Base_Start_IT(&htim2);
+
+  HAL_Delay(100);
+
+  keyboard_reset_to_default();
+  analog_reset_range();
+  g_keyboard_nkro_enable = true;
+  HAL_TIM_Base_Start_IT(&htim7);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -299,6 +335,73 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == TIM7)
+  {
+    keyboard_scan();
+    for (uint8_t i = 0; i < ADVANCED_KEY_NUM; i++)
+    {
+        g_ADC_Averages[i] = ringbuf_avg(&adc_ringbuf[i]);
+#ifdef ENABLE_FILTER
+        g_ADC_Averages[i] = adaptive_schimidt_filter(g_analog_filters+i,g_ADC_Averages[i]);
+#endif
+        if (g_keyboard_advanced_keys[i].config.mode != KEY_DIGITAL_MODE)
+        {
+            advanced_key_update_raw(g_keyboard_advanced_keys + i, g_ADC_Averages[i]);
+        }
+    }
+    switch (g_keyboard_state)
+    {
+    case KEYBOARD_DEBUG:
+      send_debug_info();
+      break;
+    case KEYBOARD_UPLOAD_CONFIG:
+      if (!load_cargo())
+      {
+        g_keyboard_state = KEYBOARD_IDLE;
+      }
+      break;
+    default:
+      keyboard_send_report();
+      break;
+    }
+  }
+  if (htim->Instance == TIM2)
+  {
+    static uint32_t test_cnt = 0;
+    test_cnt++;
+    //	  if(test_cnt%2==0) {
+    uint32_t adc1 = 0;
+    uint32_t adc2 = 0;
+    uint32_t adc3 = 0;
+    uint32_t adc4 = 0;
+
+    for (int i = 0; i < DMA_BUF_LEN; i++)
+    {
+      adc1 += ADC_Buffer[DMA_BUF_LEN * 0 + i] & 0xfff;
+      adc2 += ADC_Buffer[DMA_BUF_LEN * 1 + i] & 0xfff;
+      adc3 += ADC_Buffer[DMA_BUF_LEN * 2 + i] & 0xfff;
+      adc4 += ADC_Buffer[DMA_BUF_LEN * 3 + i] & 0xfff;
+    }
+
+    ringbuf_push(&adc_ringbuf[0 * 16 + ADDRESS], (float)adc1 / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[1 * 16 + ADDRESS], (float)adc2 / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[2 * 16 + ADDRESS], (float)adc3 / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[3 * 16 + ADDRESS], (float)adc4 / (float)DMA_BUF_LEN);
+
+    if (htim->Instance->CNT < 700)
+    {
+      g_analog_active_channel++;
+      if (g_analog_active_channel >= 16)
+      {
+        g_analog_active_channel = 0;
+      }
+      analog_channel_select(g_analog_active_channel);
+    }
+  }
+}
 
 /* USER CODE END 4 */
 
