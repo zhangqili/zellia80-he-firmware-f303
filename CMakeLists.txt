@@ -45,6 +45,19 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
 )
 
+file(GLOB_RECURSE MY_SOURCES
+    "./KeyboardKit/src/*.c"
+    "./KeyboardKit/src/midi/*.c"
+    "./KeyboardKit/src/midi/bytequeue*.c"
+    "./KeyboardKit/user/*.c"
+    "./KeyboardKit/littlefs/*.c"
+    #"./KeyboardKit/usb/usb_descriptor.c"
+    "./CherryUSB/core/usbd_core.c"
+    "./CherryUSB/class/hid/usbd_hid.c"
+    "./CherryUSB/port/fsdev/usb_dc_fsdev.c"
+    "./usb/*.c"
+    "./snake/*.c")
+
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
@@ -53,6 +66,22 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    ./KeyboardKit/src/
+    ./KeyboardKit/src/midi/
+    ./KeyboardKit/src/midi/bytequeue
+    ./KeyboardKit/src/midi/Config
+    ./KeyboardKit/user/
+    ./KeyboardKit/littlefs/
+    ./KeyboardKit/usb/
+    ./KeyboardKit/usb/lufa/
+    ./usb/
+    ./CherryUSB/core
+    ./CherryUSB/common
+    ./CherryUSB/class/hid
+    ./CherryUSB/class/midi
+    ./CherryUSB/port/fsdev
+    ./Drivers/CMSIS/Device/ST/STM32F3xx/Include
+    ./snake/
 )
 
 # Add project symbols (macros)
