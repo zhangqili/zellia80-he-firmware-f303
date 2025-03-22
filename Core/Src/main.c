@@ -252,6 +252,7 @@ int main(void)
   DWT_Init();
   usb_init();
   keyboard_init();
+  rgb_init();
   setup_midi();
 
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
@@ -271,6 +272,8 @@ int main(void)
   keyboard_reset_to_default();
   analog_reset_range();
   g_keyboard_nkro_enable = true;
+  g_keyboard_advanced_keys[1].config.calibration_mode = KEY_AUTO_CALIBRATION_UNDEFINED;
+  g_keyboard_advanced_keys[1].raw = 2048;
   HAL_TIM_Base_Start_IT(&htim7);
   /* USER CODE END 2 */
 
@@ -278,6 +281,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    keyboard_buffer_clear();
+    keyboard_add_buffer(KEY_A);
+    keyboard_buffer_send();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -340,6 +346,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM7)
   {
+    static uint32_t test_cnt = 0;
+    //test_cnt++;
+    /*
     keyboard_scan();
     for (uint8_t i = 0; i < ADVANCED_KEY_NUM; i++)
     {
@@ -368,13 +377,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       keyboard_send_report();
       break;
     }
+    */
   }
   if (htim->Instance == TIM2)
   {
-    static uint32_t test_cnt = 0;
-    test_cnt++;
-    //	  if(test_cnt%2==0) {
-    
+    /*
     uint32_t adc[8] = {0};
 
     for (int i = 0; i < DMA_BUF_LEN/2; i++)
@@ -407,6 +414,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       }
       analog_channel_select(g_analog_active_channel);
     }
+    */
   }
 }
 
