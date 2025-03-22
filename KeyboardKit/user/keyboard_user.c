@@ -14,7 +14,7 @@
 
 const Keycode g_default_keymap[LAYER_NUM][ADVANCED_KEY_NUM + KEY_NUM] = {
     {
-        KEY_ESC/*0*/,           KEY_F1/*1*/,    KEY_F2/*2*/,    KEY_F3/*3*/,    KEY_F4/*4*/,    KEY_F5/*5*/,    KEY_F6/*6*/,    KEY_F7/*7*/,    KEY_F8/*8*/,    KEY_F9/*9*/,    KEY_F10/*10*/,      KEY_F11/*11*/,          KEY_F12/*12*/,          LAYER(LAYER_MOMENTARY, 1)/*13*/, KEY_PRINT_SCREEN/*14*/,KEY_SCROLL_LOCK/*15*/, KEY_PAUSE/*16*/,
+        KEY_ESC/*0*/,           KEY_F1/*1*/,    KEY_F2/*2*/,    KEY_F3/*3*/,    KEY_F4/*4*/,    KEY_F5/*5*/,    KEY_F6/*6*/,    KEY_F7/*7*/,    KEY_F8/*8*/,    KEY_F9/*9*/,    KEY_F10/*10*/,      KEY_F11/*11*/,          KEY_F12/*12*/,          KEY_NO_EVENT/*13*/, KEY_PRINT_SCREEN/*14*/,KEY_SCROLL_LOCK/*15*/, KEY_PAUSE/*16*/,
         KEY_GRAVE/*17*/,        KEY_1/*18*/,    KEY_2/*19*/,    KEY_3/*20*/,    KEY_4/*21*/,    KEY_5/*22*/,    KEY_6/*23*/,    KEY_7/*24*/,    KEY_8/*25*/,    KEY_9/*26*/,    KEY_0/*27*/,        KEY_MINUS/*28*/,        KEY_EQUAL/*29*/,        KEY_BACKSPACE/*30*/,             KEY_INSERT/*31*/,      KEY_HOME/*32*/,        KEY_PAGE_UP/*33*/,
         KEY_TAB/*34*/,          KEY_Q/*35*/,    KEY_W/*36*/,    KEY_E/*37*/,    KEY_R/*38*/,    KEY_T/*39*/,    KEY_Y/*40*/,    KEY_U/*41*/,    KEY_I/*42*/,    KEY_O/*43*/,    KEY_P/*44*/,        KEY_LEFT_BRACE/*45*/,   KEY_RIGHT_BRACE/*46*/,  KEY_BACKSLASH/*47*/,             KEY_DELETE/*48*/,      KEY_END/*49*/,         KEY_PAGE_DOWN/*50*/,
         KEY_CAPS_LOCK/*51*/,    KEY_A/*52*/,    KEY_S/*53*/,    KEY_D/*54*/,    KEY_F/*55*/,    KEY_G/*56*/,    KEY_H/*57*/,    KEY_J/*58*/,    KEY_K/*59*/,    KEY_L/*60*/,    KEY_SEMICOLON/*61*/,KEY_APOSTROPHE/*62*/,   KEY_ENTER/*63*/,
@@ -116,11 +116,15 @@ AdvancedKey g_keyboard_advanced_keys[ADVANCED_KEY_NUM] =
 };
 
 const uint16_t g_analog_map[ADVANCED_KEY_NUM] =
-{
-    31, 30, 29, 28, 41, 42, 43, 44, 14, 15, 16, 17, 3,  2,  1,  0, 
-    40, 39, 38, 37, 51, 52, 53, 54, 24, 25, 26, 27, 13, 12, 11, 10, 
-    58, 47, 34, 20, 19, 6,  33, 46, 45, 32, 18, 5,  4,  55, 56, 57,
-    59, 60, 61, 62, 63, 50, 49, 36, 22, 23, 9,  8,  48, 35, 21, 7
+{ 
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 
+    33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 
+    44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 
+    55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 
+    66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 
+    77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
 };
 
 static const float table[]=
@@ -1196,7 +1200,7 @@ void keyboard_reboot()
 
 void analog_channel_select(uint8_t x)
 {
-    x=BCD_TO_GRAY(x);
+    //x=BCD_TO_GRAY(x);
     HAL_GPIO_WritePin(A_GPIO_Port, A_Pin, x&0x01);
     HAL_GPIO_WritePin(B_GPIO_Port, B_Pin, x&0x02);
     HAL_GPIO_WritePin(C_GPIO_Port, C_Pin, x&0x04);

@@ -349,19 +349,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     static uint32_t test_cnt = 0;
     test_cnt++;
     keyboard_scan();
-//    for (uint8_t i = 0; i < ADVANCED_KEY_NUM; i++)
-//    {
-//        g_ADC_Averages[i] = ringbuf_avg(&adc_ringbuf[i]);
-//#ifdef ENABLE_FILTER
-//        g_ADC_Averages[i] = adaptive_schimidt_filter(g_analog_filters+i,g_ADC_Averages[i]);
-//#endif
-//        AdvancedKey* key = &g_keyboard_advanced_keys[g_analog_map[i]];
-//        if (key->config.mode != KEY_DIGITAL_MODE)
-//        {
-//            advanced_key_update_raw(key, g_ADC_Averages[i]);
-//        }
-//    }
-    advanced_key_update_raw(&g_keyboard_advanced_keys[18], cos(test_cnt*0.01)*2048);
+    for (uint8_t i = 0; i < ADVANCED_KEY_NUM; i++)
+    {
+        g_ADC_Averages[i] = ringbuf_avg(&adc_ringbuf[i]);
+#ifdef ENABLE_FILTER
+        g_ADC_Averages[i] = adaptive_schimidt_filter(g_analog_filters+i,g_ADC_Averages[i]);
+#endif
+        if(i == 18)
+        {
+          g_ADC_Averages[18] = cos(test_cnt*0.01)*2048;
+        }
+        AdvancedKey* key = &g_keyboard_advanced_keys[g_analog_map[i]];
+        if (key->config.mode != KEY_DIGITAL_MODE)
+        {
+            advanced_key_update_raw(key, g_ADC_Averages[i]);
+        }
+    }
     switch (g_keyboard_state)
     {
     case KEYBOARD_DEBUG:
@@ -380,7 +383,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
   if (htim->Instance == TIM2)
   {
-    /*
     uint32_t adc[8] = {0};
 
     for (int i = 0; i < DMA_BUF_LEN/2; i++)
@@ -395,14 +397,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       adc[7] += ADC_Buffer[DMA_BUF_LEN * 3 + i * 2 + 1] & 0xfff;
     }
 
-    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[0] / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[1] / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[2] / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[3] / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[0] / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[1] / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[2] / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[3] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[0] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[1] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[2] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[3] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[4] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[5] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[6] / (float)(DMA_BUF_LEN/2));
+    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[7] / (float)(DMA_BUF_LEN/2));
 
     if (htim->Instance->CNT < 700)
     {
@@ -413,7 +415,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       }
       analog_channel_select(g_analog_active_channel);
     }
-    */
   }
 }
 
