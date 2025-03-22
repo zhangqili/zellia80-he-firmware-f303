@@ -347,9 +347,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 #ifdef ENABLE_FILTER
         g_ADC_Averages[i] = adaptive_schimidt_filter(g_analog_filters+i,g_ADC_Averages[i]);
 #endif
-        if (g_keyboard_advanced_keys[i].config.mode != KEY_DIGITAL_MODE)
+        AdvancedKey* key = &g_keyboard_advanced_keys[g_analog_map[i]];
+        if (key->config.mode != KEY_DIGITAL_MODE)
         {
-            advanced_key_update_raw(g_keyboard_advanced_keys + i, g_ADC_Averages[i]);
+            advanced_key_update_raw(key, g_ADC_Averages[i]);
         }
     }
     switch (g_keyboard_state)
