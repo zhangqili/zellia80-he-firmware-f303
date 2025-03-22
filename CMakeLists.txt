@@ -11,6 +11,7 @@ cmake_minimum_required(VERSION 3.22)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
+set(CMAKE_COLOR_DIAGNOSTICS ON)
 
 
 # Define the build type
@@ -61,6 +62,7 @@ file(GLOB_RECURSE MY_SOURCES
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    ${MY_SOURCES}
 )
 
 # Add include paths

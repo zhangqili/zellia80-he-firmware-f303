@@ -1,21 +1,9 @@
 #include "lfs.h"
-#include "sfud.h"
 #include "keyboard_def.h"
+#include "stdio.h"
 
-extern sfud_flash sfud_norflash0;
-/**
- * lfs与底层flash读数据接口
- * @param  c
- * @param  block  块编号
- * @param  off    块内偏移地址
- * @param  buffer 用于存储读取到的数据
- * @param  size   要读取的字节数
- * @return
- */
 static int lfs_deskio_read(const struct lfs_config *c, lfs_block_t block, lfs_off_t off, void *buffer, lfs_size_t size)
 {
-    sfud_read(&sfud_norflash0, c->block_size * block + off, size, (uint8_t *)buffer);
-    //w25qxx_advance_read(c->block_size * block + off, (uint8_t *)buffer ,size);
     return LFS_ERR_OK;
 }
 
@@ -30,8 +18,6 @@ static int lfs_deskio_read(const struct lfs_config *c, lfs_block_t block, lfs_of
  */
 static int lfs_deskio_prog(const struct lfs_config *c, lfs_block_t block, lfs_off_t off, const void *buffer, lfs_size_t size)
 {
-    sfud_write(&sfud_norflash0, c->block_size * block + off, size, (uint8_t *)buffer);
-    //w25qxx_advance_write(c->block_size * block + off, (uint8_t *)buffer, size);
     return LFS_ERR_OK;
 }
 
@@ -43,8 +29,6 @@ static int lfs_deskio_prog(const struct lfs_config *c, lfs_block_t block, lfs_of
  */
 static int lfs_deskio_erase(const struct lfs_config *c, lfs_block_t block)
 {
-    sfud_erase(&sfud_norflash0, (block * c->block_size), c->block_size);
-    //w25qxx_advance_sector_erase_4k(block);
     return LFS_ERR_OK;
 }
 
