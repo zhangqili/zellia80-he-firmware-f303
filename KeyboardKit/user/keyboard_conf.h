@@ -10,7 +10,7 @@
 /* Keyboard General */
 /********************/
 #define LAYER_NUM               5
-#define ADVANCED_KEY_NUM        64
+#define ADVANCED_KEY_NUM        88
 #define KEY_NUM                 0
 //#define ENABLE_FIXED_POINT_EXPERIMENTAL
 //#define CONTINOUS_POLL
@@ -104,8 +104,8 @@
 #define DEVICE_VER 2
 #define FIXED_NUM_CONFIGURATIONS 1
 
-#define MANUFACTURER "dwdwdw5163&Lzq12345"
-#define PRODUCT "Oholeo Keyboard"
+#define MANUFACTURER "MANUFACTURER"
+#define PRODUCT "Zellia 80 HE"
 #define SERIAL_NUMBER "2022123456"
 
 #define RAW_ENABLE

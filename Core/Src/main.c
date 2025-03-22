@@ -373,28 +373,34 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     static uint32_t test_cnt = 0;
     test_cnt++;
     //	  if(test_cnt%2==0) {
-    uint32_t adc1 = 0;
-    uint32_t adc2 = 0;
-    uint32_t adc3 = 0;
-    uint32_t adc4 = 0;
+    
+    uint32_t adc[8] = {0};
 
-    for (int i = 0; i < DMA_BUF_LEN; i++)
+    for (int i = 0; i < DMA_BUF_LEN/2; i++)
     {
-      adc1 += ADC_Buffer[DMA_BUF_LEN * 0 + i] & 0xfff;
-      adc2 += ADC_Buffer[DMA_BUF_LEN * 1 + i] & 0xfff;
-      adc3 += ADC_Buffer[DMA_BUF_LEN * 2 + i] & 0xfff;
-      adc4 += ADC_Buffer[DMA_BUF_LEN * 3 + i] & 0xfff;
+      adc[0] += ADC_Buffer[DMA_BUF_LEN * 0 + i * 2] & 0xfff;
+      adc[1] += ADC_Buffer[DMA_BUF_LEN * 0 + i * 2 + 1] & 0xfff;
+      adc[2] += ADC_Buffer[DMA_BUF_LEN * 1 + i * 2] & 0xfff;
+      adc[3] += ADC_Buffer[DMA_BUF_LEN * 1 + i * 2 + 1] & 0xfff;
+      adc[4] += ADC_Buffer[DMA_BUF_LEN * 2 + i * 2] & 0xfff;
+      adc[5] += ADC_Buffer[DMA_BUF_LEN * 2 + i * 2 + 1] & 0xfff;
+      adc[6] += ADC_Buffer[DMA_BUF_LEN * 3 + i * 2] & 0xfff;
+      adc[7] += ADC_Buffer[DMA_BUF_LEN * 3 + i * 2 + 1] & 0xfff;
     }
 
-    ringbuf_push(&adc_ringbuf[0 * 16 + ADDRESS], (float)adc1 / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[1 * 16 + ADDRESS], (float)adc2 / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[2 * 16 + ADDRESS], (float)adc3 / (float)DMA_BUF_LEN);
-    ringbuf_push(&adc_ringbuf[3 * 16 + ADDRESS], (float)adc4 / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[0] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[0 * 22 + ADDRESS * 2 + 1], (float)adc[1] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[2] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[1 * 22 + ADDRESS * 2 + 1], (float)adc[3] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[0] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[2 * 22 + ADDRESS * 2 + 1], (float)adc[1] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[2] / (float)DMA_BUF_LEN);
+    ringbuf_push(&adc_ringbuf[3 * 22 + ADDRESS * 2 + 1], (float)adc[3] / (float)DMA_BUF_LEN);
 
     if (htim->Instance->CNT < 700)
     {
       g_analog_active_channel++;
-      if (g_analog_active_channel >= 16)
+      if (g_analog_active_channel >= 11)
       {
         g_analog_active_channel = 0;
       }
