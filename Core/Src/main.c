@@ -274,6 +274,7 @@ int main(void)
     JumpToBootloader();
   }
   HAL_TIM_Base_Start_IT(&htim7);
+  g_keyboard_nkro_enable = true;
   /* USER CODE END 2 */
 
   /* Infinite loop */
