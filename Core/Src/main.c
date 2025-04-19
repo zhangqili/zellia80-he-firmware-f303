@@ -252,8 +252,6 @@ int main(void)
   DWT_Init();
   usb_init();
   keyboard_init();
-  rgb_init();
-  setup_midi();
 
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
   HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
@@ -271,9 +269,10 @@ int main(void)
 
   keyboard_reset_to_default();
   analog_reset_range();
-  g_keyboard_nkro_enable = true;
-  g_keyboard_advanced_keys[18].config.calibration_mode = KEY_AUTO_CALIBRATION_UNDEFINED;
-  g_keyboard_advanced_keys[18].raw = 2048;
+  if (g_ADC_Averages[1] < 1400 || g_ADC_Averages[1] > (4096 - 1400))
+  {
+    JumpToBootloader();
+  }
   HAL_TIM_Base_Start_IT(&htim7);
   /* USER CODE END 2 */
 
@@ -281,9 +280,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //keyboard_buffer_clear();
-    //keyboard_add_buffer(KEY_A);
-    //keyboard_buffer_send();
+    HAL_GPIO_WritePin(CAPSLOCK_GPIO_Port, CAPSLOCK_Pin, !(g_keyboard_led_state&BIT(1)));
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
