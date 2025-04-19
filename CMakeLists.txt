@@ -40,6 +40,7 @@ add_executable(${CMAKE_PROJECT_NAME})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
+add_subdirectory(libamp)
 
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
@@ -47,12 +48,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 file(GLOB_RECURSE MY_SOURCES
-    "./KeyboardKit/src/*.c"
-    "./KeyboardKit/src/midi/*.c"
-    "./KeyboardKit/src/midi/bytequeue*.c"
-    "./KeyboardKit/user/*.c"
-    "./KeyboardKit/littlefs/*.c"
-    #"./KeyboardKit/usb/usb_descriptor.c"
+    "./libamp_user/*.c"
     "./CherryUSB/core/usbd_core.c"
     "./CherryUSB/class/hid/usbd_hid.c"
     "./CherryUSB/port/fsdev/usb_dc_fsdev.c"
@@ -67,14 +63,6 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
-    ./KeyboardKit/src/
-    ./KeyboardKit/src/midi/
-    ./KeyboardKit/src/midi/bytequeue
-    ./KeyboardKit/src/midi/Config
-    ./KeyboardKit/user/
-    ./KeyboardKit/littlefs/
-    ./KeyboardKit/usb/
-    ./KeyboardKit/usb/lufa/
     ./usb/
     ./CherryUSB/core
     ./CherryUSB/common
@@ -82,6 +70,11 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ./CherryUSB/class/midi
     ./CherryUSB/port/fsdev
     ./Drivers/CMSIS/Device/ST/STM32F3xx/Include
+)
+
+target_include_directories(libamp PUBLIC
+    # Add user defined include paths
+    ./libamp_user
 )
 
 # Add project symbols (macros)
@@ -92,6 +85,6 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
     stm32cubemx
-
     # Add user defined libraries
+    libamp
 )

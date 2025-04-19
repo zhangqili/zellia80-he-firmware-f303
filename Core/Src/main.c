@@ -51,7 +51,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define DMA_BUF_LEN             10
+#define DMA_BUF_LEN             4
 
 /* USER CODE END PD */
 
@@ -364,13 +364,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
     switch (g_keyboard_state)
     {
-    case KEYBOARD_DEBUG:
+    case KEYBOARD_STATE_DEBUG:
       send_debug_info();
       break;
-    case KEYBOARD_UPLOAD_CONFIG:
+    case KEYBOARD_STATE_UPLOAD_CONFIG:
       if (!load_cargo())
       {
-        g_keyboard_state = KEYBOARD_IDLE;
+        g_keyboard_state = KEYBOARD_STATE_IDLE;
       }
       break;
     default:
@@ -381,7 +381,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == TIM2)
   {
     uint32_t adc[8] = {0};
-
+    memset(adc, 0 ,sizeof(adc));
     for (int i = 0; i < DMA_BUF_LEN/2; i++)
     {
       adc[0] += ADC_Buffer[DMA_BUF_LEN * 0 + i * 2] & 0xfff;

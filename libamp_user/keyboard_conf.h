@@ -13,11 +13,13 @@
 #define ADVANCED_KEY_NUM        88
 #define ANALOG_BUFFER_LENGTH    128
 #define KEY_NUM                 0
-//#define ENABLE_FIXED_POINT_EXPERIMENTAL
+//#define FIXED_POINT_EXPERIMENTAL
 //#define CONTINOUS_POLL
 #define OPTIMIZE_FOR_FLOAT_DIVISION
 //#define CONTINOUS_DEBUG
 #define DEBUG_INTERVAL 1
+#define DYNAMICKEY_ENABLE
+//#define STORAGE_ENABLE
 
 /********************/
 /* Keyboard Default */
