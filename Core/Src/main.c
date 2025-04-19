@@ -281,7 +281,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_WritePin(CAPSLOCK_GPIO_Port, CAPSLOCK_Pin, !(g_keyboard_led_state&BIT(1)));
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -344,6 +343,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM7)
   {
+    HAL_GPIO_WritePin(CAPSLOCK_GPIO_Port, CAPSLOCK_Pin, !(g_keyboard_led_state&BIT(1)));
     keyboard_scan();
     for (uint8_t i = 0; i < ANALOG_BUFFER_LENGTH; i++)
     {
