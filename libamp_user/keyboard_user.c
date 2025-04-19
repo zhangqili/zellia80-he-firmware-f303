@@ -19,7 +19,7 @@ const Keycode g_default_keymap[LAYER_NUM][ADVANCED_KEY_NUM + KEY_NUM] = {
         KEY_TAB/*34*/,          KEY_Q/*35*/,    KEY_W/*36*/,    KEY_E/*37*/,    KEY_R/*38*/,    KEY_T/*39*/,    KEY_Y/*40*/,    KEY_U/*41*/,    KEY_I/*42*/,    KEY_O/*43*/,    KEY_P/*44*/,        KEY_LEFT_BRACE/*45*/,   KEY_RIGHT_BRACE/*46*/,  KEY_BACKSLASH/*47*/,             KEY_DELETE/*48*/,      KEY_END/*49*/,         KEY_PAGE_DOWN/*50*/,
         KEY_CAPS_LOCK/*51*/,    KEY_A/*52*/,    KEY_S/*53*/,    KEY_D/*54*/,    KEY_F/*55*/,    KEY_G/*56*/,    KEY_H/*57*/,    KEY_J/*58*/,    KEY_K/*59*/,    KEY_L/*60*/,    KEY_SEMICOLON/*61*/,KEY_APOSTROPHE/*62*/,   KEY_ENTER/*63*/,
         KEY_LEFT_SHIFT<<8/*64*/,KEY_Z/*65*/,    KEY_X/*66*/,    KEY_C/*67*/,    KEY_V/*68*/,    KEY_B/*69*/,    KEY_N/*70*/,    KEY_M/*71*/,    KEY_COMMA/*72*/,KEY_DOT/*73*/,  KEY_SLASH/*74*/,    KEY_RIGHT_SHIFT<<8/*75*/,                                                                               KEY_UP_ARROW/*76*/,
-        KEY_LEFT_CTRL<<8/*77*/, KEY_LEFT_GUI<<8/*78*/, KEY_LEFT_ALT<<8/*79*/, KEY_SPACEBAR/*80*/, KEY_RIGHT_ALT<<8/*81*/, KEY_RIGHT_GUI<<8/*82*/, KEY_MENU/*83*/, KEY_RIGHT_CTRL<<8/*84*/,                                                                                           KEY_LEFT_ARROW/*85*/,  KEY_DOWN_ARROW/*86*/,  KEY_RIGHT_ARROW/*87*/,
+        KEY_LEFT_CTRL<<8/*77*/, KEY_LEFT_GUI<<8/*78*/, KEY_LEFT_ALT<<8/*79*/, KEY_SPACEBAR/*80*/, KEY_RIGHT_ALT<<8/*81*/, KEY_RIGHT_GUI<<8/*82*/, KEY_RIGHT_CTRL<<8/*83*/,                                                                                           KEY_LEFT_ARROW/*84*/,  KEY_DOWN_ARROW/*85*/,  KEY_RIGHT_ARROW/*86*/,
     }
 };
 
@@ -112,7 +112,6 @@ AdvancedKey g_keyboard_advanced_keys[ADVANCED_KEY_NUM] =
     {.key.id = 84},
     {.key.id = 85},
     {.key.id = 86},
-    {.key.id = 87},
 };
 
 const uint16_t g_analog_map[ANALOG_BUFFER_LENGTH] = {
@@ -123,12 +122,12 @@ const uint16_t g_analog_map[ANALOG_BUFFER_LENGTH] = {
     49,ANALOG_NO_MAP,  ANALOG_NO_MAP, ANALOG_NO_MAP,   ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  
     14,51,             53,             55,             57,             59,             61,             ANALOG_NO_MAP,  
     31,64,             79,             68,             80,             72,             74,             75,             
-    48,77,             66,             ANALOG_NO_MAP,  70,             ANALOG_NO_MAP,  81,             84,             
+    48,77,             66,             ANALOG_NO_MAP,  70,             ANALOG_NO_MAP,  81,             83,             
     ANALOG_NO_MAP,52,             54,             56,             58,             60,             62,             63,             
     76,78,             67,             69,             71,             73,             82,             ANALOG_NO_MAP,  
-    85,65,             ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  
+    84,65,             ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  
+    85,ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  
     86,ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  
-    87,ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  ANALOG_NO_MAP,  
     50,1,              3,              5,              7,              9,              11,             13,             
     16,18,             20,             22,             24,             26,             28,             30,             
     33,35,             37,             39,             41,             43,             45,             47,             

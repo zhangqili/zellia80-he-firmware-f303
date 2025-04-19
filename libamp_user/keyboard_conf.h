@@ -10,7 +10,7 @@
 /* Keyboard General */
 /********************/
 #define LAYER_NUM               5
-#define ADVANCED_KEY_NUM        88
+#define ADVANCED_KEY_NUM        87
 #define ANALOG_BUFFER_LENGTH    128
 #define KEY_NUM                 0
 //#define FIXED_POINT_EXPERIMENTAL
